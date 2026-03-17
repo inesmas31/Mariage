@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Louis & Inès — 1er Août 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=DM+Sans:wght@200;300;400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --noir:        #0C0C0C;
+      --blanc:       #FAF8F5;
+      --rouge:       #991B1B;
+      --rouge-fonce: #7A1515;
+      --gris:        #E4E0DA;
+      --gris-texte:  #6B6560;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--blanc);
+      color: var(--noir);
+      font-weight: 300;
+      overflow-x: hidden;
+    }
+
+    /* ──────────────────────────── NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 200;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.4rem 3rem;
+    }
+    nav.scrolled {
+      background: rgba(250,248,245,0.96);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--gris);
+    }
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.05rem; font-style: italic; font-weight: 300;
+      color: #fff; letter-spacing: 0.05em; text-decoration: none;
+      transition: color 0.3s;
+    }
+    nav.scrolled .nav-logo { color: var(--noir); }
+    .nav-links { display: flex; gap: 2rem; }
+    .nav-links a {
+      font-size: 0.62rem; font-weight: 400;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: rgba(255,255,255,0.75); text-decoration: none;
+      transition: color 0.3s;
+    }
+    nav.scrolled .nav-links a { color: var(--gris-texte); }
+    .nav-links a:hover,
+    nav.scrolled .nav-links a:hover { color: var(--rouge); }
+
+    /* ──────────────────────────── HERO */
+    .hero {
+      position: relative; height: 100vh; min-height: 700px; overflow: hidden;
+    }
+    .hero-img {
+      position: absolute; inset: 0;
+      background: url('photo 1.jpg') center 30% / cover no-repeat;
+      transform: scale(1.05); transition: transform 8s ease;
+    }
+    .hero-img.loaded { transform: scale(1); }
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(
+        to bottom,
+        rgba(10,10,10,0.3) 0%,
+        rgba(10,10,10,0.1) 40%,
+        rgba(10,10,10,0.65) 100%
+      );
+    }
+    .hero-content {
+      position: absolute; bottom: 0; left: 0; right: 0; z-index: 2;
+      padding: 5rem 4rem;
+      display: flex; align-items: flex-end; justify-content: space-between; gap: 2rem;
+    }
+    .hero-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(5rem, 13vw, 11rem);
+      font-weight: 300; line-height: 0.88; color: #fff; letter-spacing: -0.01em;
+    }
+    .hero-title em { font-style: italic; }
+    .hero-title .amp {
+      display: block; font-size: 0.45em; font-style: normal; font-weight: 300;
+      letter-spacing: 0.1em; color: rgba(255,255,255,0.45); margin: 0.4rem 0;
+    }
+    .hero-meta { text-align: right; color: rgba(255,255,255,0.8); flex-shrink: 0; }
+    .hero-meta .date-label {
+      font-size: 0.62rem; letter-spacing: 0.3em; text-transform: uppercase;
+      color: rgba(255,255,255,0.45); margin-bottom: 0.5rem;
+    }
+    .hero-meta .date-big {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.4rem, 3vw, 2.2rem); font-weight: 300; line-height: 1.2;
+    }
+    .hero-meta .lieu-italic {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic; font-size: 1rem;
+      color: rgba(255,255,255,0.5); margin-top: 0.3rem;
+    }
+    .hero-bar {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      height: 3px; background: var(--rouge); z-index: 3;
+    }
+
+    /* ──────────────────────────── UTILITAIRES */
+    section { position: relative; }
+    .wrap { max-width: 1200px; margin: 0 auto; padding: 0 4rem; }
+
+    .kicker {
+      display: inline-block; font-size: 0.62rem; font-weight: 400;
+      letter-spacing: 0.3em; text-transform: uppercase;
+      color: var(--rouge); margin-bottom: 1.5rem;
+    }
+    .headline {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.8rem, 6vw, 5.5rem);
+      font-weight: 300; line-height: 1; letter-spacing: -0.01em;
+    }
+    .headline em { font-style: italic; }
+
+    .lieu-illustration {
+      width: 380px;
+      margin-bottom: 1.5rem;
+    }
+    .lieu-illustration img {
+      width: 100%; display: block;
+      mix-blend-mode: multiply;
+    }
+
+    /* ──────────────────────────── PROGRAMME (fond rouge) */
+    #programme {
+      background: var(--rouge);
+      padding: 8rem 0; overflow: hidden; position: relative;
+    }
+    .prog-header {
+      display: flex; align-items: baseline; justify-content: space-between;
+      margin-bottom: 5rem; position: relative; z-index: 1;
+    }
+    #programme .kicker { color: rgba(255,255,255,0.4); }
+    #programme .headline { color: #fff; }
+    .prog-date {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic; font-size: 1rem; color: rgba(255,255,255,0.35);
+    }
+    .prog-items {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      position: relative; z-index: 1;
+    }
+    .prog-item {
+      padding: 3rem 2.5rem;
+      border-left: 1px solid rgba(255,255,255,0.15);
+      position: relative;
+    }
+    .prog-item:first-child { border-left: none; }
+    .prog-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 5rem; font-weight: 300;
+      color: rgba(255,255,255,0.07);
+      line-height: 1; position: absolute; top: 2rem; right: 1.5rem;
+    }
+    .prog-heure {
+      font-size: 0.62rem; letter-spacing: 0.25em; text-transform: uppercase;
+      color: rgba(255,255,255,0.5); margin-bottom: 1.5rem;
+    }
+    .prog-nom {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem; font-weight: 300; color: #fff; line-height: 1.1; margin-bottom: 0.75rem;
+    }
+    .prog-lieu {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic; font-size: 0.92rem;
+      color: rgba(255,255,255,0.55); line-height: 1.5;
+    }
+
+    /* ──────────────────────────── LE LIEU */
+    #lieu { padding: 10rem 0 0; }
+    .lieu-intro {
+      display: grid; grid-template-columns: 3fr 2fr;
+      gap: 5rem; align-items: end; margin-bottom: 5rem;
+    }
+    .lieu-intro .headline { font-size: clamp(3rem, 7vw, 6rem); }
+    .lieu-intro-right { padding-bottom: 1rem; }
+    .lieu-intro-right p {
+      font-size: 0.88rem; line-height: 2; color: var(--gris-texte); margin-bottom: 1.5rem;
+    }
+    .lieu-adresse-block {
+      border-top: 1px solid var(--gris); padding-top: 1.5rem; margin-top: 1.5rem;
+    }
+    .lieu-adresse-block .kicker { display: block; margin-bottom: 0.5rem; }
+    .lieu-adresse-block p {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic; font-size: 1.05rem; line-height: 1.6; color: var(--noir); margin: 0;
+    }
+    .btn-link {
+      display: inline-flex; align-items: center; gap: 0.6rem; margin-top: 1.5rem;
+      font-size: 0.65rem; font-weight: 400; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--rouge); text-decoration: none;
+      border-bottom: 1px solid var(--rouge); padding-bottom: 2px; transition: opacity 0.2s;
+    }
+    .btn-link:hover { opacity: 0.6; }
+    .lieu-photos-strip {
+      display: grid; grid-template-columns: 3fr 2fr; height: 520px; gap: 4px;
+    }
+    .lieu-photos-strip img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+    /* ──────────────────────────── GALERIE */
+    #galerie { padding: 10rem 0; background: var(--blanc); }
+    .galerie-header {
+      display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 4rem;
+    }
+    .galerie-note {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic; font-size: 1rem; color: var(--gris-texte);
+    }
+    .galerie-masonry {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      grid-template-rows: 260px 320px; gap: 6px;
+    }
+    .gal-item { overflow: hidden; }
+    .gal-item img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+      transition: transform 0.6s cubic-bezier(.25,.46,.45,.94);
+    }
+    .gal-item:hover img { transform: scale(1.04); }
+    .gal-item:nth-child(1) { grid-column: 1 / 6;  grid-row: 1; }
+    .gal-item:nth-child(2) { grid-column: 6 / 9;  grid-row: 1; }
+    .gal-item:nth-child(3) { grid-column: 9 / 13; grid-row: 1; }
+    .gal-item:nth-child(4) { grid-column: 1 / 5;  grid-row: 2; }
+    .gal-item:nth-child(5) { grid-column: 5 / 9;  grid-row: 2; }
+    .gal-item:nth-child(6) { grid-column: 9 / 13; grid-row: 2; }
+
+    /* ──────────────────────────── LISTE DE MARIAGE */
+    #liste {
+      background: var(--rouge-fonce);
+      padding: 9rem 0; position: relative; overflow: hidden;
+    }
+    .liste-layout {
+      display: flex; justify-content: flex-end;
+      position: relative; z-index: 1;
+    }
+    .liste-right {
+      max-width: 520px;
+    }
+    #liste .kicker { color: rgba(255,255,255,0.4); margin-bottom: 1.2rem; }
+    #liste .headline { color: #fff; margin-bottom: 2rem; }
+    .liste-right p {
+      font-size: 0.9rem; line-height: 2; color: rgba(255,255,255,0.65); margin-bottom: 2.5rem;
+    }
+    .btn-liste {
+      display: inline-block; padding: 1.1rem 2.5rem;
+      background: #fff; color: var(--rouge);
+      font-size: 0.65rem; font-weight: 400;
+      letter-spacing: 0.25em; text-transform: uppercase; text-decoration: none;
+      transition: opacity 0.2s;
+    }
+    .btn-liste:hover { opacity: 0.85; }
+    .liste-note {
+      margin-top: 1.5rem;
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic; font-size: 0.9rem; color: rgba(255,255,255,0.35);
+    }
+
+    /* ──────────────────────────── HÉBERGEMENT */
+    #hebergement { padding: 10rem 0; background: var(--blanc); }
+    .heberg-header { margin-bottom: 5rem; }
+    .heberg-intro {
+      max-width: 560px; margin-top: 1.5rem;
+      font-size: 0.88rem; line-height: 2; color: var(--gris-texte);
+    }
+    .heberg-categories { display: flex; flex-direction: column; gap: 0; }
+    .heberg-cat {
+      display: grid; grid-template-columns: 280px 1fr;
+      border-top: 1px solid var(--gris); padding: 3.5rem 0; gap: 4rem;
+    }
+    .heberg-cat:last-child { border-bottom: 1px solid var(--gris); }
+    .heberg-cat-left { padding-top: 0.2rem; }
+    .heberg-cat-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 3.5rem; font-weight: 300; line-height: 1;
+      color: var(--gris); margin-bottom: 0.75rem;
+    }
+    .heberg-cat-titre {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4rem; font-weight: 400; color: var(--noir);
+      line-height: 1.2; margin-bottom: 0.4rem;
+    }
+    .heberg-cat-note {
+      font-size: 0.68rem; letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--rouge);
+    }
+    .hotel-list { display: flex; flex-direction: column; }
+    .hotel-row {
+      display: flex; align-items: baseline; justify-content: space-between;
+      gap: 1.5rem; padding: 1rem 0; border-bottom: 1px solid var(--gris);
+    }
+    .hotel-row:first-child { border-top: none; }
+    .hotel-row:last-child { border-bottom: none; }
+    .hotel-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.15rem; font-weight: 400; color: var(--noir);
+      flex: 1;
+    }
+    .hotel-name small {
+      display: block; font-size: 0.78rem; font-style: italic;
+      color: var(--gris-texte); font-family: 'Cormorant Garamond', serif;
+      margin-top: 0.1rem;
+    }
+    .hotel-meta { display: flex; gap: 1.5rem; flex-shrink: 0; align-items: center; }
+    .hotel-dist {
+      font-size: 0.72rem; color: var(--gris-texte); letter-spacing: 0.05em; white-space: nowrap;
+    }
+    .hotel-prix {
+      font-size: 0.72rem; font-weight: 400; color: var(--rouge);
+      white-space: nowrap;
+    }
+    .hotel-prix-absent { font-size: 0.72rem; color: var(--gris); font-style: italic; }
+    .hotel-name a {
+      color: inherit; text-decoration: none;
+      border-bottom: 1px solid rgba(12,12,12,0.15);
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .hotel-name a:hover { color: var(--rouge); border-color: var(--rouge); }
+    .hotel-name small a {
+      font-size: inherit; border-bottom: 1px solid rgba(107,101,96,0.3);
+    }
+    .hotel-name small a:hover { color: var(--rouge); border-color: var(--rouge); }
+
+    /* ──────────────────────────── INFOS PRATIQUES */
+    #infos { padding: 10rem 0; background: var(--gris); }
+    .infos-header { margin-bottom: 5rem; }
+    .infos-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
+    .info-card { background: var(--blanc); padding: 3rem; }
+    .info-card-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 3.5rem; font-weight: 300; color: var(--gris); line-height: 1; margin-bottom: 1.5rem;
+    }
+    .info-card-titre {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.7rem; font-weight: 400; color: var(--noir); margin-bottom: 1rem;
+    }
+    .info-card p { font-size: 0.84rem; line-height: 2; color: var(--gris-texte); }
+    .info-card strong { color: var(--noir); font-weight: 400; }
+
+    /* ──────────────────────────── PARKING */
+    #parking { padding: 10rem 0; background: var(--blanc); }
+    .parking-header { margin-bottom: 5rem; }
+    .parking-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; }
+    .parking-block { border-top: 2px solid var(--rouge); padding-top: 2rem; }
+    .parking-lieu-titre {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.9rem; font-weight: 300; color: var(--noir);
+      margin-bottom: 0.4rem; line-height: 1.1;
+    }
+    .parking-lieu-titre em { font-style: italic; }
+    .parking-sous-titre {
+      font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--rouge); margin-bottom: 1.8rem; display: block;
+    }
+    .parking-item {
+      display: flex; gap: 1.5rem;
+      padding: 1.5rem 0; border-bottom: 1px solid var(--gris);
+    }
+    .parking-item:last-child { border-bottom: none; }
+    .parking-icon {
+      flex-shrink: 0; width: 36px; height: 36px;
+      background: var(--rouge-fonce);
+      display: flex; align-items: center; justify-content: center;
+      margin-top: 2px;
+    }
+    .parking-icon svg {
+      width: 16px; fill: none; stroke: #fff; stroke-width: 1.5; stroke-linecap: round;
+    }
+    .parking-item-titre {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem; font-weight: 400; color: var(--noir); margin-bottom: 0.3rem;
+    }
+    .parking-item p {
+      font-size: 0.82rem; line-height: 1.9; color: var(--gris-texte);
+    }
+    .parking-item a {
+      color: var(--rouge); text-decoration: none;
+      border-bottom: 1px solid rgba(153,27,27,0.3);
+    }
+    .parking-item a:hover { opacity: 0.7; }
+    .navette-badge {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      margin-top: 0.75rem;
+      padding: 0.4rem 0.9rem;
+      background: var(--rouge-pale, rgba(153,27,27,0.08));
+      font-size: 0.7rem; font-weight: 400;
+      letter-spacing: 0.1em; color: var(--rouge);
+    }
+
+
+    /* ──────────────────────────── FOOTER */
+    footer {
+      background: var(--noir); padding: 5rem 4rem 3rem;
+      display: flex; flex-direction: column; align-items: center; text-align: center;
+      position: relative; overflow: hidden;
+    }
+    .footer-names {
+      position: relative; z-index: 1;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(3rem, 8vw, 6rem);
+      font-weight: 300; font-style: italic; color: #fff; line-height: 1; margin-bottom: 1.5rem;
+    }
+    .footer-bar { width: 40px; height: 1px; background: var(--rouge); margin: 0 auto 1.5rem; position: relative; z-index: 1; }
+    .footer-sub {
+      font-size: 0.65rem; letter-spacing: 0.25em; text-transform: uppercase;
+      color: rgba(255,255,255,0.2); position: relative; z-index: 1;
+    }
+
+    /* ──────────────────────────── RESPONSIVE */
+    @media (max-width: 900px) {
+      .wrap { padding: 0 1.5rem; }
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { display: none; }
+      .hero-content { padding: 3rem 1.5rem; flex-direction: column; align-items: flex-start; gap: 1.5rem; }
+      .hero-meta { text-align: left; }
+      .prog-items { grid-template-columns: 1fr 1fr; }
+      .prog-item { border-left: none; border-top: 1px solid rgba(255,255,255,0.12); }
+      .lieu-intro { grid-template-columns: 1fr; gap: 3rem; }
+      .lieu-photos-strip { height: 300px; }
+      .galerie-masonry { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
+      .gal-item { grid-column: auto !important; grid-row: auto !important; aspect-ratio: 1; }
+      .liste-layout { grid-template-columns: 1fr; gap: 3rem; }
+      .infos-grid { grid-template-columns: 1fr; }
+      .heberg-cat { grid-template-columns: 1fr; gap: 2rem; }
+      .hotel-row { flex-direction: column; gap: 0.3rem; }
+      .parking-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav id="nav">
+    <a href="#" class="nav-logo">L & I</a>
+    <div class="nav-links">
+      <a href="#programme">Programme</a>
+      <a href="#lieu">Le lieu</a>
+      <a href="#infos">Se rendre à Biarritz</a>
+      <a href="#hebergement">Hébergement</a>
+      <a href="#parking">Se garer</a>
+      <a href="#liste">Liste de mariage</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-img" id="heroBg"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <h1 class="hero-title">
+        <em>Louis</em>
+        <span class="amp">&amp;</span>
+        <em>Inès</em>
+      </h1>
+      <div class="hero-meta">
+        <div class="date-label">Date du mariage</div>
+        <div class="date-big">1<sup>er</sup> Août<br>2026</div>
+        <div class="lieu-italic">Domaine Elhorria, Biarritz</div>
+      </div>
+    </div>
+    <div class="hero-bar"></div>
+  </div>
+
+  <!-- PROGRAMME -->
+  <section id="programme">
+    <div class="wrap">
+      <div class="prog-header">
+        <div>
+          <span class="kicker">1<sup>er</sup> Août 2026</span>
+          <h2 class="headline">Le <em>programme</em></h2>
+        </div>
+        <div class="prog-date">Pays Basque</div>
+      </div>
+      <div class="prog-items">
+        <div class="prog-item">
+          <div class="prog-num">01</div>
+          <div class="prog-heure">15h00</div>
+          <div class="prog-nom">Cérémonie</div>
+          <div class="prog-lieu">Église Saint-Pierre de la Rhune<br>Saint-Pée-sur-Nivelle</div>
+        </div>
+        <div class="prog-item">
+          <div class="prog-num">02</div>
+          <div class="prog-heure">17h30</div>
+          <div class="prog-nom">Cocktail</div>
+          <div class="prog-lieu">Domaine Elhorria<br>Biarritz</div>
+        </div>
+        <div class="prog-item">
+          <div class="prog-num">03</div>
+          <div class="prog-heure">20h30</div>
+          <div class="prog-nom">Dîner</div>
+          <div class="prog-lieu">Domaine Elhorria<br>Biarritz</div>
+        </div>
+        <div class="prog-item">
+          <div class="prog-num">04</div>
+          <div class="prog-heure">Toute la nuit</div>
+          <div class="prog-nom">La fête</div>
+          <div class="prog-lieu">Domaine Elhorria<br>Biarritz</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LE LIEU -->
+  <section id="lieu">
+    <div class="wrap">
+      <div class="lieu-intro">
+        <div>
+          <div class="lieu-illustration">
+            <img src="24.png" alt="Illustration aquarelle — Domaine Elhorria">
+          </div>
+          <span class="kicker">Le cadre</span>
+          <h2 class="headline">Domaine<br><em>Elhorria</em></h2>
+        </div>
+        <div class="lieu-intro-right">
+          <p>
+            Niché dans les collines verdoyantes aux portes de Biarritz, le Domaine Elhorria est un joyau de l'architecture basque. Ses façades blanches aux poutres sombres, ses jardins luxuriants et son patio aux arcades élégantes en font un cadre d'exception.
+          </p>
+          <p>
+            Là où l'authenticité basque rencontre l'élégance intemporelle — un lieu pensé pour célébrer les plus beaux instants.
+          </p>
+          <div class="lieu-adresse-block">
+            <span class="kicker">Adresse</span>
+            <p>Domaine Elhorria<br>Biarritz, Pays Basque</p>
+          </div>
+          <a href="https://maps.google.com/?q=Domaine+Elhorria+Biarritz" target="_blank" class="btn-link">
+            Voir sur Maps →
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="lieu-photos-strip">
+      <img src="FRONT PATIO.jpg" alt="Patio du Domaine Elhorria">
+      <img src="PATIO FACADE.jpg" alt="Dîner sous les arcades">
+    </div>
+  </section>
+
+  <!-- GALERIE -->
+
+  <!-- INFOS PRATIQUES -->
+  <section id="infos">
+    <div class="wrap">
+      <div class="infos-header">
+        <span class="kicker">Accès</span>
+        <h2 class="headline">Se rendre à <em>Biarritz</em></h2>
+      </div>
+      <div class="infos-grid">
+        <div class="info-card">
+          <div class="info-card-num">01</div>
+          <h3 class="info-card-titre">Venir à Biarritz</h3>
+          <p>
+            <strong>En avion —</strong> Aéroport de Biarritz-Bayonne (BIQ), à 10 min du domaine.<br><br>
+            <strong>En train —</strong> Gare de Bayonne ou Biarritz, puis navette ou taxi.<br><br>
+            <strong>En voiture —</strong> A63, sortie Biarritz Centre.
+          </p>
+        </div>
+        <div class="info-card">
+          <div class="info-card-num">03</div>
+          <h3 class="info-card-titre">Contact</h3>
+          <p>
+            Pour toute question, n'hésitez pas à nous contacter directement.<br><br>
+            Nous avons hâte de vous retrouver pour ce jour si spécial.
+          </p>
+        </div>
+        <div class="info-card">
+          <div class="info-card-num">04</div>
+          <h3 class="info-card-titre">Cérémonie</h3>
+          <p>
+            <strong>Église Saint-Pierre de la Rhune</strong><br>
+            Saint-Pée-sur-Nivelle<br><br>
+            La cérémonie débute à 15h. Merci d'arriver quelques minutes avant.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HÉBERGEMENT -->
+  <section id="hebergement">
+    <div class="wrap">
+      <div class="heberg-header">
+        <span class="kicker">Où dormir</span>
+        <h2 class="headline">Hébergement</h2>
+        <p class="heberg-intro">Le 1er août est en pleine haute saison basque — nous vous recommandons de réserver dès que possible. Voici nos suggestions par secteur.</p>
+      </div>
+
+      <div class="heberg-categories">
+
+        <!-- CAT 1 -->
+        <div class="heberg-cat">
+          <div class="heberg-cat-left">
+            <div class="heberg-cat-num">01</div>
+            <div class="heberg-cat-titre">Aux alentours<br>du domaine</div>
+            <div class="heberg-cat-note">Hors Biarritz centre</div>
+          </div>
+          <div class="hotel-list">
+            <div class="hotel-row">
+              <div class="hotel-name"><a href="https://maps.google.com/?q=Fasthotel+Biarritz" target="_blank">Fasthotel</a></div>
+              <div class="hotel-meta">
+                <span class="hotel-dist">4 min du domaine</span>
+                <span class="hotel-prix">150 € / nuit</span>
+              </div>
+            </div>
+            <div class="hotel-row">
+              <div class="hotel-name">Ibis, Campanile & Best Western
+                <small>Hôtels près de l'aéroport — <a href="https://maps.google.com/?q=hotels+aeroport+Biarritz+Anglet" target="_blank">voir sur Maps</a></small>
+              </div>
+              <div class="hotel-meta">
+                <span class="hotel-dist">5 min du domaine</span>
+                <span class="hotel-prix">à partir de 140 € / nuit</span>
+              </div>
+            </div>
+            <div class="hotel-row">
+              <div class="hotel-name"><a href="https://maps.google.com/?q=Nere+Chocoa+Biarritz" target="_blank">Nere Chocoa</a></div>
+              <div class="hotel-meta">
+                <span class="hotel-dist">5 min du domaine</span>
+                <span class="hotel-prix-absent">Tarifs variables</span>
+              </div>
+            </div>
+            <div class="hotel-row">
+              <div class="hotel-name"><a href="https://maps.google.com/?q=Casaviel+Biarritz" target="_blank">Casaviel</a></div>
+              <div class="hotel-meta">
+                <span class="hotel-dist">5 min du domaine</span>
+                <span class="hotel-prix-absent">Tarifs variables</span>
+              </div>
+            </div>
+            <div class="hotel-row">
+              <div class="hotel-name"><a href="https://maps.google.com/?q=Novotel+Biarritz+Aeroport" target="_blank">Novotel</a></div>
+              <div class="hotel-meta">
+                <span class="hotel-dist">9 min du domaine</span>
+                <span class="hotel-prix">180 € / nuit</span>
+              </div>
+            </div>
+            <div class="hotel-row">
+              <div class="hotel-name"><a href="https://maps.google.com/?q=Appart+Hotel+Bellevue+Biarritz" target="_blank">Appart'Hôtel Bellevue</a></div>
+              <div class="hotel-meta">
+                <span class="hotel-dist">15 min du domaine</span>
+                <span class="hotel-prix">150 € / nuit</span>
+              </div>
+            </div>
+            <div class="hotel-row">
+              <div class="hotel-name"><a href="https://maps.google.com/?q=Hotel+Villa+la+Renaissance+Anglet" target="_blank">Hôtel Villa la Renaissance</a></div>
+              <div class="hotel-meta">
+                <span class="hotel-dist">15 min du domaine</span>
+                <span class="hotel-prix">150 € / nuit</span>
+              </div>
+            </div>
+            <div class="hotel-row">
+              <div class="hotel-name"><a href="https://maps.google.com/?q=Okko+Hotels+Bayonne+Centre" target="_blank">Okko Hotels Bayonne Centre</a></div>
+              <div class="hotel-meta">
+                <span class="hotel-dist">15 min du domaine</span>
+                <span class="hotel-prix">160 € / nuit</span>
+              </div>
+            </div>
+            <div class="hotel-row">
+              <div class="hotel-name"><a href="https://maps.google.com/?q=The+Originals+City+Bayonne+Nord" target="_blank">The Originals City Bayonne Nord</a></div>
+              <div class="hotel-meta">
+                <span class="hotel-dist">20 min du domaine</span>
+                <span class="hotel-prix">160 € / nuit</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CAT 2 -->
+        <div class="heberg-cat">
+          <div class="heberg-cat-left">
+            <div class="heberg-cat-num">02</div>
+            <div class="heberg-cat-titre">Centre de<br>Biarritz</div>
+            <div class="heberg-cat-note">15 min du domaine</div>
+          </div>
+          <div class="hotel-list">
+            <div class="hotel-row">
+              <div class="hotel-name"><a href="https://maps.google.com/?q=Hotel+Cosmopolitain+Biarritz" target="_blank">Hôtel Cosmopolitain</a></div>
+              <div class="hotel-meta">
+                <span class="hotel-dist">15 min du domaine</span>
+                <span class="hotel-prix">180 € / nuit</span>
+              </div>
+            </div>
+            <div class="hotel-row">
+              <div class="hotel-name"><a href="https://maps.google.com/?q=Hotel+au+Bon+Coin+Biarritz" target="_blank">Hôtel au Bon Coin</a></div>
+              <div class="hotel-meta">
+                <span class="hotel-dist">15 min du domaine</span>
+                <span class="hotel-prix">200 € / nuit</span>
+              </div>
+            </div>
+            <div class="hotel-row">
+              <div class="hotel-name"><a href="https://maps.google.com/?q=Ama+Hotel+Biarritz" target="_blank">Ama Hôtel</a></div>
+              <div class="hotel-meta">
+                <span class="hotel-dist">15 min du domaine</span>
+                <span class="hotel-prix">200 € / nuit</span>
+              </div>
+            </div>
+            <div class="hotel-row">
+              <div class="hotel-name"><a href="https://maps.google.com/?q=Hotel+Marbella+Biarritz" target="_blank">Hôtel Marbella</a></div>
+              <div class="hotel-meta">
+                <span class="hotel-dist">15 min du domaine</span>
+                <span class="hotel-prix">215 € / nuit</span>
+              </div>
+            </div>
+            <div class="hotel-row">
+              <div class="hotel-name"><a href="https://maps.google.com/?q=Urban+Style+Biarritz+Le+Relais" target="_blank">Urban Style Biarritz Le Relais</a></div>
+              <div class="hotel-meta">
+                <span class="hotel-dist">15 min du domaine</span>
+                <span class="hotel-prix">215 € / nuit</span>
+              </div>
+            </div>
+            <div class="hotel-row">
+              <div class="hotel-name"><a href="https://maps.google.com/?q=Hotel+de+la+Plage+Biarritz" target="_blank">Hôtel de la Plage</a></div>
+              <div class="hotel-meta">
+                <span class="hotel-dist">15 min du domaine</span>
+                <span class="hotel-prix">240 – 310 € / nuit</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CAT 3 -->
+        <div class="heberg-cat">
+          <div class="heberg-cat-left">
+            <div class="heberg-cat-num">03</div>
+            <div class="heberg-cat-titre">Hossegor</div>
+            <div class="heberg-cat-note">Gare de Dax ou Saint-Vincent-de-Tyrosse</div>
+          </div>
+          <div class="hotel-list">
+            <div class="hotel-row">
+              <div class="hotel-name"><a href="https://maps.google.com/?q=Hotel+du+Parc+Hossegor" target="_blank">Hôtel du Parc</a></div>
+              <div class="hotel-meta">
+                <span class="hotel-prix">160 € / nuit</span>
+              </div>
+            </div>
+            <div class="hotel-row">
+              <div class="hotel-name"><a href="https://maps.google.com/?q=Hotel+Bleu+Soleil+Hossegor" target="_blank">Hôtel Bleu Soleil</a></div>
+              <div class="hotel-meta">
+                <span class="hotel-prix">130 – 150 € / nuit</span>
+              </div>
+            </div>
+            <div class="hotel-row">
+              <div class="hotel-name"><a href="https://maps.google.com/?q=Hotel+du+Cap+Hossegor" target="_blank">Hôtel du Cap</a></div>
+              <div class="hotel-meta">
+                <span class="hotel-prix-absent">Tarifs variables</span>
+              </div>
+            </div>
+            <div class="hotel-row">
+              <div class="hotel-name"><a href="https://maps.google.com/?q=Joe+and+Joe+Hossegor" target="_blank">Joe & Joe</a>
+                <small>Auberge de jeunesse</small>
+              </div>
+              <div class="hotel-meta">
+                <span class="hotel-prix-absent">Tarifs variables</span>
+              </div>
+            </div>
+            <div class="hotel-row">
+              <div class="hotel-name"><a href="https://maps.google.com/?q=Les+Fougeres+Hossegor" target="_blank">Les Fougères</a>
+                <small>Maison pour 4 personnes</small>
+              </div>
+              <div class="hotel-meta">
+                <span class="hotel-prix-absent">Tarifs variables</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CAT 4 -->
+        <div class="heberg-cat">
+          <div class="heberg-cat-left">
+            <div class="heberg-cat-num">04</div>
+            <div class="heberg-cat-titre">Arcangue<br>& environs</div>
+            <div class="heberg-cat-note">Bidart, Ahetze, Arcangue</div>
+          </div>
+          <div class="hotel-list">
+            <div class="hotel-row">
+              <div class="hotel-name"><a href="https://maps.google.com/?q=Hotel+Laminak+Bidart" target="_blank">Hôtel Laminak</a>
+                <small>Bidart — charme basque, piscine</small>
+              </div>
+              <div class="hotel-meta">
+                <span class="hotel-dist">10 min du domaine</span>
+                <span class="hotel-prix-absent">Tarifs variables</span>
+              </div>
+            </div>
+            <div class="hotel-row">
+              <div class="hotel-name"><a href="https://maps.google.com/?q=Villa+Arche+Bidart" target="_blank">Villa L'Arche</a>
+                <small>Bidart — vue mer, boutique hotel</small>
+              </div>
+              <div class="hotel-meta">
+                <span class="hotel-dist">12 min du domaine</span>
+                <span class="hotel-prix-absent">Tarifs variables</span>
+              </div>
+            </div>
+            <div class="hotel-row">
+              <div class="hotel-name"><a href="https://www.airbnb.fr/s/Arcangue--France" target="_blank">Gîtes & chambres d'hôtes</a>
+                <small>Arcangue, Ahetze — nombreuses locations sur Airbnb</small>
+              </div>
+              <div class="hotel-meta">
+                <span class="hotel-prix-absent">Tarifs variables</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- SE GARER -->
+  <section id="parking">
+    <div class="wrap">
+      <div class="parking-header">
+        <span class="kicker">Stationnement</span>
+        <h2 class="headline">Se <em>garer</em></h2>
+      </div>
+      <div class="parking-grid">
+
+        <!-- Cérémonie -->
+        <div class="parking-block">
+          <h3 class="parking-lieu-titre">Église <em>Saint-Pierre de la Rhune</em></h3>
+          <span class="parking-sous-titre">Saint-Pée-sur-Nivelle — Cérémonie 15h</span>
+
+          <div class="parking-item">
+            <div class="parking-icon">
+              <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 12h5a2 2 0 0 0 0-4H8v8"/></svg>
+            </div>
+            <div>
+              <div class="parking-item-titre">Parking du bourg</div>
+              <p>Place du Fronton, Saint-Pée-sur-Nivelle.<br>
+              <a href="https://maps.google.com/?q=Place+du+Fronton+Saint-Pée-sur-Nivelle" target="_blank">Voir sur Maps →</a></p>
+            </div>
+          </div>
+
+          <div class="parking-item">
+            <div class="parking-icon">
+              <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 12h5a2 2 0 0 0 0-4H8v8"/></svg>
+            </div>
+            <div>
+              <div class="parking-item-titre">Parking du Trinquet</div>
+              <p>À deux pas de l'église, accessible à pied en quelques minutes.<br>
+              <a href="https://maps.google.com/?q=Trinquet+Saint-Pée-sur-Nivelle" target="_blank">Voir sur Maps →</a></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Domaine Elhorria -->
+        <div class="parking-block">
+          <h3 class="parking-lieu-titre">Domaine <em>Elhorria</em></h3>
+          <span class="parking-sous-titre">Biarritz — Cocktail & Soirée</span>
+
+          <div class="parking-item">
+            <div class="parking-icon">
+              <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 12h5a2 2 0 0 0 0-4H8v8"/></svg>
+            </div>
+            <div>
+              <div class="parking-item-titre">Parking sur place</div>
+              <p>Un parking est disponible directement au domaine. Les places sont limitées — nous vous encourageons à covoiturer.</p>
+            </div>
+          </div>
+
+          <div class="parking-item">
+            <div class="parking-icon">
+              <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 12h5a2 2 0 0 0 0-4H8v8"/></svg>
+            </div>
+            <div>
+              <div class="parking-item-titre">Parking de débordement</div>
+              <p>Si le parking du domaine est complet, un parking supplémentaire est disponible à proximité.<br>
+              <a href="#" target="_blank">Voir sur Maps →</a>
+              </p>
+              <div class="navette-badge">
+                <svg width="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 11l17-7-7 17-2-7-8-3z"/></svg>
+                Navette — 10 min à pied
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- LISTE DE MARIAGE -->
+  <section id="liste">
+    <div class="wrap">
+      <div class="liste-layout">
+        <div class="liste-right">
+          <span class="kicker">Liste de mariage</span>
+          <h2 class="headline" style="color:#fff;">Nos <em>envies</em></h2>
+          <p>
+            Votre présence est le plus beau cadeau que vous puissiez nous offrir. Si toutefois vous souhaitez nous gâter, nous avons constitué une liste avec nos envies pour notre vie à deux.
+          </p>
+          <a href="https://www.millemercismariage.com/louines/liste.html" target="_blank" class="btn-liste">Accéder à notre liste</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-names">Louis & Inès</div>
+    <div class="footer-bar"></div>
+    <div class="footer-sub">1<sup>er</sup> Août 2026 &nbsp;·&nbsp; Domaine Elhorria, Biarritz</div>
+  </footer>
+
+  <script>
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 80);
+    });
+    window.addEventListener('load', () => {
+      document.getElementById('heroBg').classList.add('loaded');
+    });
+  </script>
+</body>
+</html>
