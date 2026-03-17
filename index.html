@@ -374,7 +374,22 @@
     .info-card strong { color: var(--noir); font-weight: 400; }
 
     /* ──────────────────────────── PARKING */
-    #parking { padding: 10rem 0; background: var(--blanc); }
+    #parking { background: var(--blanc); overflow: hidden; }
+    .parking-layout {
+      display: grid;
+      grid-template-columns: 380px 1fr;
+    }
+    .parking-photo {
+      position: sticky; top: 0;
+      height: 100vh;
+      overflow: hidden;
+    }
+    .parking-photo img {
+      width: 100%; height: 100%; object-fit: cover; object-position: center top; display: block;
+    }
+    .parking-content {
+      padding: 1.5rem 5rem;
+    }
     .parking-header { margin-bottom: 5rem; }
     .parking-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; }
     .parking-block { border-top: 2px solid var(--rouge); padding-top: 2rem; }
@@ -423,15 +438,6 @@
       letter-spacing: 0.1em; color: var(--rouge);
     }
 
-
-    /* ──────────────────────────── PHOTO BREAK */
-    .photo-break {
-      width: 100%; height: 55vh; min-height: 320px; overflow: hidden;
-    }
-    .photo-break img {
-      width: 100%; height: 100%; object-fit: cover; object-position: center 30%;
-      display: block;
-    }
 
     /* ──────────────────────────── FOOTER */
     footer {
@@ -495,11 +501,10 @@
       .hotel-row { flex-direction: column; gap: 0.2rem; }
       .hotel-meta { flex-direction: row; gap: 1rem; }
 
-      /* Photo break */
-      .photo-break { height: 50vw; min-height: 200px; }
-
       /* Parking */
-      #parking { padding: 5rem 0; }
+      .parking-layout { grid-template-columns: 1fr; }
+      .parking-photo { position: relative; height: 60vw; min-height: 260px; }
+      .parking-content { padding: 4rem 1.5rem; }
       .parking-grid { grid-template-columns: 1fr; }
 
       /* Footer */
@@ -894,19 +899,18 @@
     </div>
   </section>
 
-  <!-- PHOTO COMPOTE -->
-  <div class="photo-break">
-    <img src="compote.jpeg" alt="Louis & Inès">
-  </div>
-
   <!-- SE GARER -->
   <section id="parking">
-    <div class="wrap">
-      <div class="parking-header">
-        <span class="kicker">Stationnement</span>
-        <h2 class="headline">Se <em>garer</em></h2>
+    <div class="parking-layout">
+      <div class="parking-photo">
+        <img src="compote.jpeg" alt="Louis & Inès">
       </div>
-      <div class="parking-grid">
+      <div class="parking-content">
+        <div class="parking-header">
+          <span class="kicker">Stationnement</span>
+          <h2 class="headline">Se <em>garer</em></h2>
+        </div>
+        <div class="parking-grid">
 
         <!-- Cérémonie -->
         <div class="parking-block">
@@ -967,16 +971,16 @@
             </div>
           </div>
         </div>
-
-      </div>
-    </div>
+        </div><!-- /parking-grid -->
+      </div><!-- /parking-content -->
+    </div><!-- /parking-layout -->
   </section>
 
   <!-- LISTE DE MARIAGE -->
   <section id="liste">
     <div class="wrap">
       <div class="liste-layout">
-        <img src="photo 2.jpg" alt="Domaine Elhorria" class="liste-photo">
+        <img src="nos envies.jpeg" alt="Louis & Inès" class="liste-photo">
         <div class="liste-right">
           <span class="kicker">Liste de mariage</span>
           <h2 class="headline" style="color:#fff;">Nos <em>envies</em></h2>
